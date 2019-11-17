@@ -5,12 +5,13 @@
 	"dependencies": {
 		"apify": "^0.15.2"
 	},
-	"devDependencies": {},
+	"devDependencies": {
+		"prettier": "^1.19.1"
+	},
 	"scripts": {
 		"start": "node main.js",
 		"test": "echo \"Error: oops, the actor has no tests yet, sad!\" && exit 1",
 		"del": "rimraf apify_local/* && rimraf apify_storage/* && apify run"
-
 	},
 	"author": "It's not you it's me",
 	"license": "ISC"
