@@ -1,9 +1,21 @@
-# My beautiful actor
+<h1>WoW Classic News Scraper</h1>
 
-The `README.md` file contains a documentation what your actor does and how to use it,
-which is then displayed in the app or Apify Store. It's always a good
-idea to write a good `README.md`, in a few months not even you
-will remember all the details about the actor.
+<h3>About</h3>
+<p>The WoW Classic News Scraper takes a peek into the realm of Blizzard Official forums to identify hot-topics and key issues on the fly. With new information and view-points coming out every minute, it's easy to get lost in the sea of forum posts. For anyone who loves WoW classic, but doesn't have the time to 'try-hard', then this is for you.</p>
+<h3>Why even make this?</h3>
+<p>As a father, full time coder and all the while trying to stay busy keeping up with the hottest trends, I don't have the time to spend combing through forum posts and engaging in online keyboard battles. I also find that my usual way of getting up-to-soeed on topics of interests, podcasts, take too long and leave a large gap in time when I need information quickly and cleanly. This is a way to help currate and stay up to date on a game I still love.</p>
 
-You can use [Markdown](https://www.markdownguide.org/cheat-sheet)
-language for rich formatting.
+<p>I'm still pruning out the scraping logic and identifying resources for this data, but I'm optimistic that being able to evaluate the data will help others quickly find the newest scuttlebutt happening around the World of Warcraft: Classic</p>
+
+<h3>How it works</h3>
+<p>Apify helps currate requests to identify which kind of forum page we're looking at.</p>
+<p>Puppetteer helps us crawl and parse and get anything we ever needed.</p>
+
+<h3>Next Steps</h3>
+<ul>
+<li>[ ] Scrape individual forum posts</li>
+<li>[ ] Identify real world cues that the data points to (i.e. multiple posts duscuss a certain add on: investigate this add on and why it is controversial)</li>
+<li>[ ] Get a DB going</li>
+<li>[ ] Establish a clean data structure for parsing</li>
+<li>[ ] Take a wholistic look at the app and how best to use the data</li>
+</ul>
