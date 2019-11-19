@@ -39,6 +39,27 @@ Apify.main(async () => {
                 console.log(
                     `You are looking at forum posts, my dude! -- ${request.url}`
                 );
+
+                let scrapedForumPost = {
+                    id: null,
+                    poster: {
+                        user_name: null,
+                        user_info: null
+                    },
+                    post: {
+                        post_id: null,
+                        post_content: null,
+                        original_post: null, //type: boolean
+                        post_rating: null, //type: number
+
+                        post_by_blizzard: null
+                    },
+                    replies: {
+                        post_replies: null, //type: number
+                        post_blue_reply: null,
+                        post_children: []
+                    }
+                };
             }
 
             // await Apify.pushData({
