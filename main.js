@@ -1,3 +1,4 @@
+require("dotenv").config();
 const Apify = require("apify");
 const moment = require("moment");
 
