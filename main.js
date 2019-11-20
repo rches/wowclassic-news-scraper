@@ -1,4 +1,5 @@
 const Apify = require("apify");
+const moment = require("moment");
 
 //list global variables
 
@@ -58,7 +59,8 @@ Apify.main(async () => {
                         post_replies: null, //type: number
                         post_blue_reply: null,
                         post_children: []
-                    }
+                    },
+                    updated_at: moment().format("YYYY-MM-DDTHH:mm:ss")
                 };
             }
 
