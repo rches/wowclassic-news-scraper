@@ -5,7 +5,8 @@
 	"dependencies": {
 		"apify": "^0.15.2",
 		"dotenv": "^8.2.0",
-		"moment": "^2.24.0"
+		"moment": "^2.24.0",
+		"mongodb": "^3.3.4"
 	},
 	"devDependencies": {
 		"prettier": "^1.19.1"
