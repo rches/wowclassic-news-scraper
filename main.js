@@ -1,10 +1,18 @@
 require("dotenv").config();
 const Apify = require("apify");
 const moment = require("moment");
+const MongoClient = require("mongodb").MongoClient;
 
 //list global variables
 
 Apify.main(async () => {
+    const uri = process.env.DB_CONNECT;
+    let mongoConnection = await MongoClient(uri, { useNewUrlParser: true });
+    mongoConnection.connect(err => {
+        const collection = mongoConnection.db("test").collection("devices");
+        // perform actions on the collection object
+        mongoConnection.close();
+    });
     const requestQueue = await Apify.openRequestQueue();
 
     for (i = 0; i < 7; i++) {
@@ -65,11 +73,19 @@ Apify.main(async () => {
                 };
             }
 
-            // await Apify.pushData({
-            //     title: scrapedJson.topic_list.topics.fancy_title,
-            //     url: request.url,
-            //     succeeded: true,
-            // });
+            try {
+                if (
+                    scrapedForumPost.id //&& Other qualifiers for forum data
+                ) {
+                    await this.collection.updateOne(
+                        { id: scrapedForumPost.id },
+                        { $set: scrapedForumPost },
+                        { upsert: true }
+                    );
+                }
+            } catch (e) {
+                console.log(`error loading to mongo: ${e}`);
+            }
         },
         handleFailedRequestFunction: async ({ request }) => {
             // This function is called when the crawling of a request failed too many times
