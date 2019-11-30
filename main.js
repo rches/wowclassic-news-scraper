@@ -71,20 +71,19 @@ Apify.main(async () => {
                     },
                     updated_at: moment().format("YYYY-MM-DDTHH:mm:ss")
                 };
-            }
-
-            try {
-                if (
-                    scrapedForumPost.id //&& Other qualifiers for forum data
-                ) {
-                    await this.collection.updateOne(
-                        { id: scrapedForumPost.id },
-                        { $set: scrapedForumPost },
-                        { upsert: true }
-                    );
+                try {
+                    if (
+                        scrapedForumPost.id //&& Other qualifiers for forum data
+                    ) {
+                        await this.collection.updateOne(
+                            { id: scrapedForumPost.id },
+                            { $set: scrapedForumPost },
+                            { upsert: true }
+                        );
+                    }
+                } catch (e) {
+                    console.log(`error loading to mongo: ${e}`);
                 }
-            } catch (e) {
-                console.log(`error loading to mongo: ${e}`);
             }
         },
         handleFailedRequestFunction: async ({ request }) => {
