@@ -11,7 +11,6 @@ Apify.main(async () => {
     mongoConnection.connect(err => {
         const collection = mongoConnection.db("test").collection("devices");
         // perform actions on the collection object
-        mongoConnection.close();
     });
     const requestQueue = await Apify.openRequestQueue();
 
@@ -38,7 +37,7 @@ Apify.main(async () => {
                 for (i = 0; i < scrapedJson.topic_list.topics.length; i++) {
                     let forumPostURL = `https://us.forums.blizzard.com/en/wow/t/${scrapedJson.topic_list.topics[i].id}`;
                     await requestQueue.addRequest({
-                        url: forumPostURL,
+                        url: `${forumPostURL}.json?track_visit=false`,
                         userData: { requestType: "getForumData" }
                     });
                     console.log(forumPostURL);
@@ -46,44 +45,66 @@ Apify.main(async () => {
             }
 
             if (request.userData.requestType === "getForumData") {
-                console.log(
-                    `You are looking at forum posts, my dude! -- ${request.url}`
+                // console.log(
+                //     `You are looking at forum posts, my dude! -- ${request.url}`
+                // );
+                let fullForumRequest = request.url.replace(
+                    "track_visit=false",
+                    ""
                 );
 
-                let scrapedForumPost = {
-                    id: null,
-                    poster: {
-                        user_name: null,
-                        user_info: null
-                    },
-                    post: {
-                        post_id: null,
-                        post_content: null,
-                        original_post: null, //type: boolean
-                        post_rating: null, //type: number
-
-                        post_by_blizzard: null
-                    },
-                    replies: {
-                        post_replies: null, //type: number
-                        post_blue_reply: null,
-                        post_children: []
-                    },
-                    updated_at: moment().format("YYYY-MM-DDTHH:mm:ss")
-                };
                 try {
-                    if (
-                        scrapedForumPost.id //&& Other qualifiers for forum data
-                    ) {
-                        await this.collection.updateOne(
-                            { id: scrapedForumPost.id },
-                            { $set: scrapedForumPost },
-                            { upsert: true }
-                        );
-                    }
+                    let rawJSON = JSON.parse(
+                        await page.$eval(`body`, el => el.innerText)
+                    );
+                    let fullPostIDs = rawJSON.post_stream.stream;
+
+                    fullPostIDs.forEach(
+                        el => (fullForumRequest += `&post_ids%5B%5D=${el}`)
+
+                        // fullForumRequest.concat("", `&post_ids%5B%5D=${el}`)
+                    );
+
+                    console.log(fullForumRequest);
                 } catch (e) {
-                    console.log(`error loading to mongo: ${e}`);
+                    console.log(`error in getting forum data ${e}`);
                 }
+
+                // let scrapedForumPost = {
+                //     id: null,
+                //     poster: {
+                //         user_name: null,
+                //         user_info: null
+                //     },
+                //     post: {
+                //         post_id: null,
+                //         post_content: null,
+                //         original_post: null, //type: boolean
+                //         post_rating: null, //type: number
+
+                //         post_by_blizzard: null
+                //     },
+                //     replies: {
+                //         post_replies: null, //type: number
+                //         post_blue_reply: null,
+                //         post_children: []
+                //     },
+                //     updated_at: moment().format("YYYY-MM-DDTHH:mm:ss")
+                // };
+
+                // try {
+                //     if (
+                //         scrapedForumPost.id //&& Other qualifiers for forum data
+                //     ) {
+                //         await this.collection.updateOne(
+                //             { id: scrapedForumPost.id },
+                //             { $set: scrapedForumPost },
+                //             { upsert: true }
+                //         );
+                //     }
+                // } catch (e) {
+                //     console.log(`error loading to mongo: ${e}`);
+                // }
             }
         },
         handleFailedRequestFunction: async ({ request }) => {
@@ -99,4 +120,6 @@ Apify.main(async () => {
     await crawler.run();
 
     console.log("Crawler finished.");
+
+    mongoConnection.close();
 });
