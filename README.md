@@ -19,3 +19,5 @@
 <li>[ ] Establish a clean data structure for parsing</li>
 <li>[ ] Take a wholistic look at the app and how best to use the data</li>
 </ul>
+
+<p>UPDATE: 11/30 - Configuration needs to be done to retrieve ALL forum posts. Currently, GET request only retrieves up to 20 posts (including topic post) of a topic. Currently, the post IDs are concatonated into one GET request, but that still will only return a maximum of 20 posts. Will update with work around to ensure all posts for a topic post are scraped at once for preservation of data.</p>
