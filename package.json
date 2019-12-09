@@ -6,7 +6,9 @@
 		"apify": "^0.15.2",
 		"dotenv": "^8.2.0",
 		"moment": "^2.24.0",
-		"mongodb": "^3.3.5"
+		"mongodb": "^3.3.5",
+		"request": "^2.88.0",
+		"request-promise": "^4.2.5"
 	},
 	"devDependencies": {
 		"prettier": "^1.19.1"

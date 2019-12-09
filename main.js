@@ -2,6 +2,8 @@ require("dotenv").config();
 const Apify = require("apify");
 const moment = require("moment");
 const MongoClient = require("mongodb").MongoClient;
+const request = require("request");
+const requestPromise = require(`request-promise`);
 
 //list global variables
 
@@ -40,34 +42,49 @@ Apify.main(async () => {
                         url: `${forumPostURL}.json?track_visit=false`,
                         userData: { requestType: "getForumData" }
                     });
-                    console.log(forumPostURL);
                 }
             }
 
             if (request.userData.requestType === "getForumData") {
-                // console.log(
-                //     `You are looking at forum posts, my dude! -- ${request.url}`
-                // );
                 let fullForumRequest = request.url.replace(
                     "track_visit=false",
                     ""
                 );
 
+                let rawJSON;
+
                 try {
-                    let rawJSON = JSON.parse(
+                    rawJSON = JSON.parse(
                         await page.$eval(`body`, el => el.innerText)
                     );
-                    let fullPostIDs = rawJSON.post_stream.stream;
 
-                    fullPostIDs.forEach(
-                        el => (fullForumRequest += `&post_ids%5B%5D=${el}`)
+                    // fullPostIDs.forEach(
 
-                        // fullForumRequest.concat("", `&post_ids%5B%5D=${el}`)
-                    );
-
-                    console.log(fullForumRequest);
+                    //     posts.json?post_ids[]=5944106
+                    //     el => (fullForumRequest + `&post_ids%5B%5D=${el}`)
+                    // );
                 } catch (e) {
-                    console.log(`error in getting forum data ${e}`);
+                    console.log(`error in getting forum json ${e}`);
+                }
+
+                let fullPostIDs = rawJSON.post_stream.stream;
+                let topic_ID = rawJSON.post_stream.posts[0].topic_id;
+                let fullForumDiscussion = [];
+
+                for (i = 0; i < fullPostIDs.length; i++) {
+                    try {
+                        let individualPostURL = `https://us.forums.blizzard.com/en/wow/t/${topic_ID}/posts.json?post_ids%5B%5D=${fullPostIDs[i]}`;
+                        request;
+                        let rawResponse = await requestPromise({
+                            url: individualPostURL,
+                            method: "GET"
+                        });
+                        console.log(rawResponse);
+                    } catch (e) {
+                        console.log(
+                            `error in fetching forum post ${individualPostURL} : ${e}`
+                        );
+                    }
                 }
 
                 // let scrapedForumPost = {
