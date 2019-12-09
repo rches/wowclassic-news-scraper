@@ -21,3 +21,5 @@
 </ul>
 
 <p>UPDATE: 11/30 - Configuration needs to be done to retrieve ALL forum posts. Currently, GET request only retrieves up to 20 posts (including topic post) of a topic. Currently, the post IDs are concatonated into one GET request, but that still will only return a maximum of 20 posts. Will update with work around to ensure all posts for a topic post are scraped at once for preservation of data.</p>
+
+<p>UPDATE: 12/8 - Found logic to request each individual forum post and reply. Working towards adding logic to request 20 posts at a time as 20 is the number of posts loaded on scroll. Making individual GET requests is incredibly resource conusuming - making 10k+ GET requests per call. Will circle back to reduce the number of calls, but still be able to push all comments into one array.</p>
